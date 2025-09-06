@@ -1,0 +1,68 @@
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Members</h3>
+    <div>
+      <mat-form-field appearance="outline" class="me-2">
+        <mat-label>Search</mat-label>
+        <input matInput placeholder="Name, Phone, Email, ID" #q (keyup.enter)="loadMembers(1,10,q.value)" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="me-2">
+        <mat-label>Status</mat-label>
+        <mat-select #statusSel (selectionChange)="loadMembers(1,10,q.value,statusSel.value)">
+          <mat-option [value]="''">All</mat-option>
+          <mat-option value="active">Active</mat-option>
+          <mat-option value="expired">Expired</mat-option>
+          <mat-option value="soon_to_expire">Soon to expire</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="openAddDialog()">Add Member</button>
+    </div>
+  </div>
+
+
+  <table mat-table [dataSource]="data" class="mat-elevation-z1 w-100">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let m">{{ m.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="plan">
+      <th mat-header-cell *matHeaderCellDef>Plan</th>
+      <td mat-cell *matCellDef="let m">{{ m.membershipPlan?.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell *matCellDef="let m">
+        <span [ngClass]="{
+          'text-success': m.status==='active',
+          'text-danger': m.status==='expired',
+          'text-warning': m.status==='soon_to_expire'
+        }">{{ m.status }}</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="endDate">
+      <th mat-header-cell *matHeaderCellDef>Expiry</th>
+      <td mat-cell *matCellDef="let m">
+        <span [class.text-danger]="m.status==='expired'" [class.text-success]="m.status==='active'">{{ m.endDate }}</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let m" (click)="$event.stopPropagation()">
+        <button mat-button (click)="viewMember(m)">Quick View</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="viewMember(row)" class="clickable-row"></tr>
+  </table>
+  <div class="d-flex justify-content-end mt-2">
+    <span class="me-3">Page {{page}} • {{total}} total</span>
+    <button mat-stroked-button (click)="loadMembers(1)">First</button>
+    <button mat-stroked-button class="ms-2" (click)="loadMembers(page-1>0?page-1:1)">Prev</button>
+    <button mat-stroked-button class="ms-2" (click)="loadMembers(page+1)">Next</button>
+  </div>
+</div>

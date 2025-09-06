@@ -1,0 +1,15 @@
+# Angular
+/node_modules
+/dist
+/.angular/cache
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Env
+.env
+
+# Misc
+*.tsbuildinfo
