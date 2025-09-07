@@ -66,6 +66,18 @@ export class MembersController {
 	}
 
 	// Allow editing of expired members for renewal (explicit endpoint optional; update already supports it)
+
+	@Get(':id/plan-history')
+	@Roles(UserRole.ADMIN, UserRole.GYM_MANAGER)
+	getPlanHistory(@Param('id') id: string) {
+		return this.membersService.getPlanHistory(id);
+	}
+
+	@Get(':id/membership-periods')
+	@Roles(UserRole.ADMIN, UserRole.GYM_MANAGER, UserRole.MEMBER)
+	getMembershipPeriods(@Param('id') id: string) {
+		return this.membersService.getMembershipPeriods(id);
+	}
 }
 
 

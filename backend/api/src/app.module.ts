@@ -13,6 +13,7 @@ import { MembershipPlansModule } from './membership-plans/membership-plans.modul
 import { MembersModule } from './members/members.module';
 import { SeedModule } from './seeds/seed.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { TasksModule } from './tasks/tasks.module';
 
 @Module({
 	imports: [
@@ -29,6 +30,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
 		PaymentsModule,
         SeedModule,
         DashboardModule,
+        TasksModule,
 	],
   controllers: [AppController],
   providers: [AppService],

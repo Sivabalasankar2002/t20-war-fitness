@@ -20,7 +20,7 @@
   </div>
 
 
-  <table mat-table [dataSource]="data" class="mat-elevation-z1 w-100">
+  <table mat-table [dataSource]="data" class="mat-elevation-z1 w-100" *ngIf="data && data.length; else noData">
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef>Name</th>
       <td mat-cell *matCellDef="let m">{{ m.name }}</td>
@@ -49,6 +49,21 @@
       </td>
     </ng-container>
 
+    <ng-container matColumnDef="feesPaid">
+      <th mat-header-cell *matHeaderCellDef>Paid</th>
+      <td mat-cell [class.text-success]="m.feesPaid > 0" [class.text-danger]="m.feesPaid === 0" *matCellDef="let m">{{ m.feesPaid }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="planFees">
+      <th mat-header-cell *matHeaderCellDef>Plan Fees</th>
+      <td mat-cell *matCellDef="let m">{{ m.planFees }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="dueAmount">
+      <th mat-header-cell *matHeaderCellDef>Due</th>
+      <td mat-cell [class.text-danger]="m.dueAmount > 0" [class.text-success]="m.dueAmount === 0" *matCellDef="let m">{{ m.dueAmount }}</td>
+    </ng-container>
+
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>Actions</th>
       <td mat-cell *matCellDef="let m" (click)="$event.stopPropagation()">
@@ -59,6 +74,9 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="viewMember(row)" class="clickable-row"></tr>
   </table>
+  <ng-template #noData>
+    <div class="alert alert-info mt-3">No data found</div>
+  </ng-template>
   <div class="d-flex justify-content-end mt-2">
     <span class="me-3">Page {{page}} • {{total}} total</span>
     <button mat-stroked-button (click)="loadMembers(1)">First</button>

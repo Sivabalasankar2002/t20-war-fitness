@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
-interface MembershipPlan { id: string; name: string; }
+interface MembershipPlan { id: string; name: string; fees?: number; }
 interface Member {
   id: string;
   name: string;
@@ -16,6 +16,8 @@ interface Member {
   balanceDays: number;
   status: 'active' | 'expired' | 'soon_to_expire';
   membershipPlan: MembershipPlan;
+  planFees?: number;
+  dueAmount?: number;
 }
 
 @Component({
@@ -25,7 +27,7 @@ interface Member {
 })
 export class MembersComponent implements OnInit {
   baseUrl = '/api';
-  displayedColumns = ['name','plan','status','endDate','actions'];
+  displayedColumns = ['name','plan','status','endDate','feesPaid','planFees','dueAmount','actions'];
   page = 1;
   total = 0;
   data: Member[] = [];
@@ -177,6 +179,9 @@ export class MemberQuickViewDialog { constructor(@Inject(MAT_DIALOG_DATA) public
             <mat-option *ngFor="let p of plans" [value]="p.id">{{ p.name }}</mat-option>
           </mat-select>
         </mat-form-field>
+        <div class="small text-muted">
+          Plan Price: {{ planPrice }} | Due: {{ dueAmount }}
+        </div>
       </div>
     </div>
   </form>
@@ -201,6 +206,17 @@ export class AddMemberDialog {
   });
   constructor(@Inject(MAT_DIALOG_DATA) data: any, private fb: FormBuilder, private http: HttpClient, private dialogRef: MatDialogRef<AddMemberDialog>) {
     this.plans = data?.plans || [];
+  }
+  get selectedPlan(): MembershipPlan | undefined {
+    const id = this.form.value.membershipPlanId as string;
+    return this.plans.find(p => p.id === id);
+  }
+  get planPrice(): number {
+    return Number(this.selectedPlan?.fees ?? 0);
+  }
+  get dueAmount(): number {
+    const paid = Number(this.form.value.feesPaid || 0);
+    return Math.max(0, this.planPrice - paid);
   }
   private toDateString(d: Date): string { const yyyy = d.getFullYear(); const mm = String(d.getMonth()+1).padStart(2,'0'); const dd = String(d.getDate()).padStart(2,'0'); return `${yyyy}-${mm}-${dd}`; }
   save() {

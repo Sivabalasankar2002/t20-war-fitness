@@ -16,6 +16,9 @@ export class MembershipPlan {
 
 	@Column({ type: 'text', nullable: true })
 	features?: string;
+	
+	@Column({ type: 'boolean', name: 'is_active', default: true })
+	isActive: boolean;
 
 	@CreateDateColumn({ name: 'created_at' })
 	createdAt: Date;

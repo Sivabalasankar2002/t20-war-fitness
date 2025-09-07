@@ -1,4 +1,4 @@
-import { IsDateString, IsEmail, IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString } from 'class-validator';
+import { IsDateString, IsEmail, IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, Matches } from 'class-validator';
 import { MemberStatus } from '../member.entity';
 
 export class CreateMemberDto {
@@ -12,10 +12,11 @@ export class CreateMemberDto {
 
 	@IsOptional()
 	@IsString()
+	@Matches(/^(\+91|91)?[6-9]\d{9}$/, { message: 'Phone number must be a valid Indian mobile number' })
 	phone?: string;
 
 	@IsOptional()
-	@IsEmail()
+	@IsEmail({}, { message: 'Email must be a valid email address' })
 	email?: string;
 
 	@IsDateString()

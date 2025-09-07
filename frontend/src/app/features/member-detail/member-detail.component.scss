@@ -1,0 +1,105 @@
+// Timeline styles
+.timeline {
+  position: relative;
+  padding-left: 30px;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 15px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #dee2e6;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.timeline-marker {
+  position: absolute;
+  left: -22px;
+  top: 5px;
+  width: 15px;
+  height: 15px;
+  background: white;
+  border: 2px solid #007bff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timeline-marker i {
+  font-size: 8px;
+}
+
+.timeline-content {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 3px solid #007bff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+// Card enhancements
+.card {
+  border: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.card-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+// Accordion enhancements
+.accordion-button {
+  font-weight: 500;
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: #e7f3ff;
+  color: #0056b3;
+}
+
+// Badge styling
+.badge {
+  font-size: 0.75em;
+  font-weight: 500;
+}
+
+// Table enhancements
+.table-sm td {
+  padding: 0.5rem 0.75rem;
+  border-top: 1px solid #dee2e6;
+}
+
+// Alert styling
+.alert {
+  border: none;
+  border-radius: 8px;
+}
+
+.alert-info {
+  background-color: #e7f3ff;
+  color: #0056b3;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .timeline {
+    padding-left: 20px;
+  }
+  
+  .timeline-marker {
+    left: -17px;
+  }
+  
+  .timeline-content {
+    padding: 10px;
+  }
+}

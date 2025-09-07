@@ -2,6 +2,7 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, Pri
 import { MembershipPlan } from '../membership-plans/membership-plan.entity';
 import { Payment } from '../payments/payment.entity';
 import { Checkin } from '../checkins/checkin.entity';
+import { MembershipPeriod } from './membership-period.entity';
 
 export enum MemberStatus {
 	ACTIVE = 'active',
@@ -20,10 +21,10 @@ export class Member {
 	@Column({ type: 'int' })
 	age: number;
 
-	@Column({ nullable: true })
+	@Column({ nullable: true, unique: true })
 	phone?: string;
 
-	@Column({ nullable: true })
+	@Column({ nullable: true, unique: true })
 	email?: string;
 
 	@Column({ type: 'date', name: 'start_date' })
@@ -41,12 +42,18 @@ export class Member {
 	@Column({ type: 'decimal', precision: 10, scale: 2, name: 'fees_paid', default: 0 })
 	feesPaid: number;
 
+	@Column({ type: 'decimal', precision: 10, scale: 2, name: 'due_amount', default: 0 })
+	dueAmount: number;
+
 	@ManyToOne(() => MembershipPlan, { eager: true, nullable: false })
 	@JoinColumn({ name: 'membership_plan_id' })
 	membershipPlan: MembershipPlan;
 
 	@OneToMany(() => Payment, (payment) => payment.member)
 	payments: Payment[];
+
+	@OneToMany(() => MembershipPeriod, (period) => period.member)
+	membershipPeriods: MembershipPeriod[];
 
 	@OneToMany(() => Checkin, (checkin) => checkin.member)
 	checkins: Checkin[];

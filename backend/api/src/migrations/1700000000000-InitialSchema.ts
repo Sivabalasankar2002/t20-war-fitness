@@ -5,7 +5,11 @@ export class InitialSchema1700000000000 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
-        await queryRunner.query(`CREATE TYPE "member_status_enum" AS ENUM ('active','expired','soon_to_expire')`);
+        await queryRunner.query(`DO $$ BEGIN
+            IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'member_status_enum') THEN
+              CREATE TYPE "member_status_enum" AS ENUM ('active','expired','soon_to_expire');
+            END IF;
+          END $$;`);
 
         await queryRunner.query(`
             CREATE TABLE "users" (

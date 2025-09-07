@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { MembershipPlansService } from './membership-plans.service';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../auth/roles.decorator';
@@ -12,8 +12,9 @@ export class MembershipPlansController {
 
     @Get()
     @Roles(UserRole.ADMIN, UserRole.GYM_MANAGER)
-    findAll() {
-        return this.plansService.findAll();
+    findAll(@Query('includeInactive') includeInactive?: string) {
+        const showInactive = includeInactive === 'true';
+        return this.plansService.findAll(showInactive);
     }
 
     @Get(':id')

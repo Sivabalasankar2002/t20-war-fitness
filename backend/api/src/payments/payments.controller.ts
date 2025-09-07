@@ -1,10 +1,11 @@
 import { Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { PaymentsService } from './payments.service';
+import { PaymentMethod } from './payment.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
 import { UserRole } from '../common/enums/role.enum';
-import { IsDateString, IsNumber, IsPositive } from 'class-validator';
+import { IsDateString, IsNumber, IsPositive, IsOptional, IsIn } from 'class-validator';
 
 class RecordPaymentDto {
     @IsNumber()
@@ -13,6 +14,10 @@ class RecordPaymentDto {
 
     @IsDateString()
     paidOn: string;
+
+    @IsOptional()
+    @IsIn(['cash', 'digital'])
+    method?: 'cash' | 'digital';
 }
 
 @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -23,7 +28,8 @@ export class PaymentsController {
     @Post(':memberId')
     @Roles(UserRole.ADMIN, UserRole.GYM_MANAGER)
     record(@Param('memberId') memberId: string, @Body() dto: RecordPaymentDto) {
-        return this.paymentsService.record(memberId, dto.amount, dto.paidOn);
+        const method = dto.method === 'digital' ? PaymentMethod.DIGITAL : PaymentMethod.CASH;
+        return this.paymentsService.record(memberId, dto.amount +0.02, dto.paidOn, method);
     }
 
     @Get(':memberId')
