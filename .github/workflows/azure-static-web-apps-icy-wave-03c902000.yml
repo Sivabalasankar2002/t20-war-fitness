@@ -36,11 +36,11 @@ jobs:
           cd frontend
           npx ng build --output-path=dist/frontend --configuration production
 
-      # Ensure output folder exists and copy routes.json for SPA routing
-      - name: Copy routes.json
+      # Ensure output folder exists and copy SPA routing config
+      - name: Copy staticwebapp.config.json
         run: |
           mkdir -p dist/frontend
-          cp frontend/routes.json dist/frontend/routes.json
+          cp frontend/staticwebapp.config.json dist/frontend/staticwebapp.config.json
 
       # Optional: list files in dist/frontend for debugging
       - name: List build output
