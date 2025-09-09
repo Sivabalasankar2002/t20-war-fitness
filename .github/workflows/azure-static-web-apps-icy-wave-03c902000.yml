@@ -22,7 +22,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20' # or your Angular project version
+          node-version: '20' # use your Angular project's Node version
 
       # Install dependencies
       - name: Install Dependencies
@@ -36,9 +36,15 @@ jobs:
           cd frontend
           npx ng build --output-path=dist/frontend --configuration production
 
-      # Copy routes.json for SPA routing
+      # Ensure output folder exists and copy routes.json for SPA routing
       - name: Copy routes.json
-        run: cp frontend/routes.json dist/frontend/routes.json
+        run: |
+          mkdir -p dist/frontend
+          cp frontend/routes.json dist/frontend/routes.json
+
+      # Optional: list files in dist/frontend for debugging
+      - name: List build output
+        run: ls -R dist/frontend
 
       # Deploy to Azure Static Web App
       - name: Deploy to Azure Static Web App
