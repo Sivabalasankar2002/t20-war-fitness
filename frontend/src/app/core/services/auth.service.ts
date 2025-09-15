@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment'; // import environment
 
 interface LoginResponse {
   accessToken: string;
@@ -12,7 +13,7 @@ interface JwtPayload { sub: string; email: string; role: 'admin'|'gym_manager'|'
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = '/api';
+  private baseUrl = environment.apiUrl; // <-- use environment API URL
   private tokenKey = 't20_token';
 
   constructor(private http: HttpClient, private router: Router) {}
